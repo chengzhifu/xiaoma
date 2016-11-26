@@ -1,0 +1,67 @@
+前期准备：
+1、推荐使用系统：Linux，需要熟悉Linux的基础操作
+如果电脑安装的系统是windows，那么建议安装一个virtualbox虚拟机，然后在virtualbox里面安装ubuntu系统
+2、以太坊的编程语言是solidity，学习solidity之前，应该先学习基础编程语言：Html、Css、javaScript、jQuery、Json、Nodejs
+
+一、以太坊客户端
+http://www.ethdocs.org/en/latest/ethereum-clients/index.html
+
+为什么会有这么多用不同语言实现的客户端？解释如下：
+From the earliest days of the project there have been multiple client implementations across a range of different operating systems. That client diversity is a huge win for the ecosystem as a whole. It lets us verify that the protocol (specified in the Yellow Paper) is unambiguous. It keeps the door open for new innovation. It keeps us all honest. However, it can be very confusing for end-users, because there is no universal “Ethereum Installer” for them to use.
+As of September 2016, the leading implementations are go-ethereum and Parity.
+看不懂？没关系，反正你知道，go-ethereum就是目前最流行，最先进的客户端就行了。
+
+二、安装以太坊客户端，以go-ethereum为例
+https://github.com/ethereum/go-ethereum/wiki/Building-Ethereum
+在线安装（installing from ppa），命令如下：
+sudo apt-get install software-properties-common
+sudo add-apt-repository -y ppa:ethereum/ethereum
+sudo apt-get update
+sudo apt-get install ethereum
+
+三、简单测试go-ethereum
+1、创建私有链开发环境：启动geth，进入控制台来创建账户：geth --datadir "~/ethdev" --dev （这个命令的意思是在根目录新建一个文件夹ethdev，设置这个文件夹的属性为datadir，系统就会拿这个文件夹用来存放私有链数据库和key的地方，然后--dev以开发模式启动控制台）
+2、进入geth第二个控制台，同时输出日志到新建文件geth.log：geth --dev console 2>>geth.log（这个2必不可少，为什么呢？）
+3、查询以太坊账户：eth.accounts
+4、新建以太坊账户：personal.newAccount()
+5、查询账户余额：eth.getBalance(account name)
+6、发送以太币：eth.sendTransaction({from:usr1,to:usr2,value:web3.toWei("how much","ether")})
+（一般常见的合约交互有两种：json-rpc和web3-js，但是json-rpc在命令行传入大量的参数，易出错，不推荐。web3-js是一个比较友好的交互接口）
+7、查询当前区块：eth.blockNumber()
+8、启动挖矿：miner.start()
+9、停止挖矿：miner.stop()
+10、退出控制台：exit
+
+四、安装solidity开发框架truffle
+安装truffle之前，要先安装nodejs、npm
+1、安装nodejs：先检查是否已经安装过。在命令行输入nodejs -v查询nodejs版本，如果返还版本号，说明已经安装，无需再安装。如果没有，就按照系统提示安装nodejs，安装命令：sudo install nodejs
+如果默认安装的版本比较老，可以升级nodejs版本，命令如下：
+先清除npm cathe：sudo npm cathe clean -f
+然后安装n模块：sudo npm install -g n
+然后将nodejs升级到稳定版本：sudo n stable
+2、安装npm：npm (node package manager)是node模块管理工具，类似与Linux下的yum和apt。先检查是否已经安装过，在命令行输入npm -v查询npm版本，如果返还版本号，说明已经安装，无需再安装。如果没有，就按照系统提示安装npm，安装命令：sudo install npm
+升级版本：npm update
+3、安装git：如果没有安装git，要先安装git
+4、完成以上两个安装之后，开始安装truffle，安装命令：sudo npm install -g truffle
+
+5、安装ethereumjs-testrpc
+需要安装ethereum客户端，来支持JSON RPC API调用开发环境，推荐使用ethereumjs-testrpc，
+https://github.com/ethereumjs/testrpc
+
+安装命令：npm install -g ethereumjs-testrpc
+
+ethereumjs客户端是用javascript语言实现的ethereum客户端。testrpc，is the fast ethereum RPC client for testing and development。
+rpc：远程过程调用协议（remote procedure call protocol），
+
+5、利用这个测试版的ethereum客户端进行truffle开发测试
+完成以上安装内容后，接下来开始测试一下利用truffle开发框架搭建起来的最简单的一个智能合约（系统默认提供的一个例子）
+5.1、创建一个新的文件夹：mkdir xiaoma
+5.2、进入xiaoma文件夹：cd xiaoma
+5.3、在xiaoma文件夹里进行truffle初始化：truffle init，此步骤会在xiaoma文件夹下面自动生成智能合约目录框架，你可以对里面的代码进行修改。
+5.4、对智能合约进行编译：truffle compile
+5.5、启动testrpc服务：testrpc
+5.6、执行智能合约：truffle migrate
+5.7、启动智能合约服务：truffle serve
+5.8、用浏览器打开：localhost:8080，开始测试发送接收metacoin
+
+至此，你已经完成了两个测试：ethereum测试，truffle框架测试。
