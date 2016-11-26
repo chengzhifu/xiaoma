@@ -1,0 +1,44 @@
+怎么学习solidity呢？其实有官方教程：
+英文原版：http://solidity.readthedocs.io/en/latest/
+中文翻译版：http://ethfans.org/wikis/Solidity-%E7%9B%AE%E5%BD%95
+
+一、安装solc
+1、方法一：命令行安装
+sudo add-apt-repository ppa:ethereum/ethereum
+sudo apt-get update
+sudo apt-get install solc
+安装好solc之后，再设置solc为solidity的默认编译器，命令行：admin.setSolc("solc的安装目录")
+
+2、方法二：不安装solc，直接利用浏览器在线编译：
+https://ethereum.github.io/browser-solidity/#version=soljson-v0.4.4+commit.4633f3de.js
+
+二、智能合约测试
+首先进入geth控制台geth --dev console 2>>geth.log，查看一下目前的编译器是否solidity：web3.eth.getCompilers()
+
+（一）编译一个简单的合约
+1、编写函数代码，代码源命名为abc：  
+abc=“contract test {function multiply8(uint a) returns(uint b) {return a*8;}}”
+这里定义了一个函数：multiply8，功能是：输入一个数字a，返回a*8。
+2、将函数代码编译成为EVM字节码：myabc=eth.compile.solidity(abc).test
+
+（二）创建合约
+需要有一个以太坊账户进行部署合约。所以在进行此步骤钱，先确保你已经创建了一个以太坊账户（personal.newAccount("yourcode")），并且有一定的余额。没有余额的话，就启动挖矿miner.start()，过一会就会挖到以太币了。
+1、获得账户：myaddress=eth.accounts[0]
+2、定义一个abi（abi是一个js的数组）： 
+myabi=[ { constant:false, inputs:{name:'a',type:'uint256'} } ]
+这条命令最容易出错，filter is not a funcition ，[]：定义数据
+3、创建智能合约：mycontract=eth.contract(myabi)
+
+（三）部署合约
+1、将智能合约写入到区块里面。
+myfirstcontract=mycontract.new({from:myaddress,data:myabc.code})
+这句命令的意思是：由账户myaddress将一个新的合约代码myabc.code部署到区块里面。
+操作这条部署命令前，需要将账户myaddress解锁：personal.unlockAccount(myaddress)
+2、将智能合约写入到区块后，查看一下：txpool.status，会发现你刚刚的智能合约处于pending（未确认）的状态。这个时候需要启动挖矿miner.start()，将智能合约真正得写入区块链中。写入后（pending=0）就可以停止挖矿了。
+
+（四）合约部署完毕之后，就可以开始与合约进行交互，调用合约了。
+1、通过abi取得合约对象：myobject=eth.contract(myabc.info.abiDefinition)
+2、拿到合约实例：myexample=myobject.at(myfirstcontract.address)
+3、调用合约里面的函数multiply8：myexample.multiply8.sendTransaction(3,{from:myaddress})
+这句命令的意思是：以太坊账户myaddress（也就是eth.accounts[0]）将一个数字3发送到了区块链上，调用了myexample这个智能合约里面的multiply8这个函数。
+4、另外一种调用方式：myexample.multiply8.call(5)，返回结果为40
