@@ -1,0 +1,103 @@
+帮助命令：man、help、whatis、info，选项描述：/
+复制终端里面的内容：ctrl+shift+c，粘贴：ctrl+shift+v
+
+
+一、文件管理
+（一）目录查询ls（list的意思），
+1、参数：-a（all的意思）、-l（long的意思），-h（人性化显示），查询对象：/目录
+2、组合命令：-al、-lh（h是human的意思，人性化显示）、-alh等等，命令是可以随意组合的
+3、文件类型：（1）二进制文件：-开头  （2）目录：d开头  （3）软连接：l开头
+4、权限类型：r（读read），w（写write），x（执行运行操作，运行脚本或命令）
+（二）目录处理
+1、新建文件夹：mkdir（make directory），递归创建路径：mkdir -p
+2、目录处理：cd（change directory），进入目录：cd+filename，返回上一层菜单：cd ..
+3、显示目录绝对路径：pwd
+4、删除空目录：rmdir（remove empty directory）
+5、删除文件、目录：rm ，-f（强制删除不询问），-r（删除目录），-rf（强制删除目录不询问）
+6、复制：cp（copy），-r：复制目录，-p：保持属性不变，-rp
+7、剪切/改名：mv
+（三）文件处理
+1、新建文件：touch
+2、浏览文件，显示短文件内容：cat，-n：显示行号，
+3、显示长文件：more，空格翻页，q退出；但是更推荐less，因为还可以往回翻页pageup，还可以进行搜索：/搜索关键词，n：下一个搜索内容
+4、看一个文件的前几行：head，-n 10：显示前10行，看一个文件后面几行，tail（这个挺有用的，可以看实时日志）  tail -f filename （-f的意思是动态显示）
+（四）链接处理：ln（link）
+用途：相当于windows系统的快捷方式
+
+二、权限管理
+1、更改用户权限：chmod：change the pemissons mode of a file
+2、区分rwx对于文件权限与目录权限的区别。
+3、更改所有者：chown，更改所属组：chgrp
+
+三、压缩解压缩
+1、压缩文件类型：.gz，压缩命令：gzip，解压命令：gunzip，特点：不能压缩目录，不保留源文件
+2、打包文件类型：.tar，打包命令：tar -cf，解包命令：tar -xf
+3、打包压缩文件类型：.tar.gz，打包压缩命令：tar -zcf，解包解压缩命令：tar -zxf
+4、压缩文件类型：.zip，压缩命令：zip，解压命令：unzip
+5、压缩文件类型：.bz2，压缩命令：bzip2，解压命令：bunzip2
+6、打包压缩文件类型：.tar.bz2，打包压缩命令：tar -jcf，解包解压缩命令：tar -jxf
+
+四、vim文本编辑操作常用命令
+1、打开、退出命令：vim filename、q
+2、编辑命令：a、i、o（insert的意思）
+3、删除命令：x、dd、D（delete的意思）
+4、复制命令：yy、dyy
+5、剪切命令：dd、ndd（和删除命令是一样的）
+6、粘贴命令：p、P（paste的意思）
+7、替换修改命令：r、R（replace）
+8、撤回操作：u（undo的意思）
+9、搜索：/，下一个：n
+10、替换：%s/old/new/g
+11、保存：w、w new_filename
+12、保存退出：wq、ZZ
+13、不保存退出：q!
+14、设置行号、删除行号：set nu、set nonu
+15、打开NERDTree功能的命令：vim、NERDTree
+16、NERDTree：ctr+w+h 光标移到左侧树形目录，ctrl+w+l 光标移到右侧文件显示窗口。ctrl+w，光标自动在左右侧窗口切换
+17、退出NERDTree：q，打开目录：o、O，关闭目录：x、X
+
+
+五、软件安装
+（一）源码包（一般是C语言的），安装过程困难，不适合初学者。
+（二）二进制包（RPM包、系统默认包）
+1、rpm手工安装：rpm -ivh  （i：install，v：显示详细信息，h：显示进度，U：升级）
+这种手工安装rpm包，最大的问题是有时候会出现需要安装一大堆依赖包，然后烦死你
+2、rpm卸载：rpm -e （e：erase），rpm查询：rpm -q（q：query）
+3、yum在线安装，yum在线安装可以解决安装包依赖性问题
+yum -y install+安装包名字 （y：自动回复yes）
+4、yum升级与卸载：yum -y update+安装包名字，yum -y remove+安装包名字。（注意，务必要加上安装包名字，不然会直接升级系统或者卸载系统。。。）
+
+5、apt是什么？是advanced package tool，高级软件包管理工具
+apt-get是什么？一般需要root权限执行，所以一般跟着sudo命令。功能与yum类似。
+安装软件包：sudo apt-get install packagename 
+卸载软件包：sudo apt-get remove packagename
+卸载软件包以及依赖包：sudo apt-get autoremove packagename
+
+6、add-apt-repository是什么？
+我们可以使用 "add-apt-repository" 脚本添加 ppa 到当前的库中并且自动导入公钥。 
+add-apt-repository ppa:<ppa_name>，这句命令的意思是：获取最新的个人软件包档案源（ppa），将其添加到当前的apt库当中（source.list），并自动导入公钥（key）。
+举个例子：安装最新的audacious（ubuntu下）
+sudo add-apt-repository ppa:nilarimogard/webupd8
+sudo apt-get update
+sudo apt-get install audacious
+注：
+add-apt-repository 是由 python-software-properties 这个工具包提供的（也就是一个python的脚本），所以要先安装python-software-properties 才能使用 add-apt-repository，否则会显示“command not found”
+安装方法：apt-get install python-software-properties
+sudo apt-get install software-properties-common
+
+7、ppa是什么？
+ppa是personal package archive，个人软件包存档的意思。
+
+六、用户身份切换
+1、su：换成root身份
+2、sudo：没有换root身份，使用root权限执行
+
+六、其他
+1、tab：输入命令自动补齐
+2、ctrl+l：清屏
+3、npm是什么？
+答：npm是随同nodejs一起安装的包管理工具
+使用npm安装nodejs模块语法格式：npm install  "module name"
+npm 的包安装分为本地安装（local）、全局安装（global）两种，从敲的命令行来看，差别只是有没有-g而已，比如
+npm install express          # 本地安装
+npm install express -g     # 全局安装
