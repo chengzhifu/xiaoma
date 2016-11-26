@@ -42,3 +42,5 @@ myfirstcontract=mycontract.new({from:myaddress,data:myabc.code})
 3、调用合约里面的函数multiply8：myexample.multiply8.sendTransaction(3,{from:myaddress})
 这句命令的意思是：以太坊账户myaddress（也就是eth.accounts[0]）将一个数字3发送到了区块链上，调用了myexample这个智能合约里面的multiply8这个函数。
 4、另外一种调用方式：myexample.multiply8.call(5)，返回结果为40
+
+至此，你已经完成了一个完整的智能合约测试。
